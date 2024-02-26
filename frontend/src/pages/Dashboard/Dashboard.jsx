@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Dashboard.module.css";
 import Modal from "../../components/Modal/Modal";
 import { LeftSidebar } from "../../components/LeftSidebar/LeftSidebar";
@@ -7,12 +7,38 @@ import Card from "../../components/Card/Card";
 
 export const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [todos, setTodos] = useState([]);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/v1/todo");
+        if (response.ok) {
+          const data = await response.json();
+          setTodos(data.todos);
+        } else {
+          console.error("Error fetching todos:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching todos:", error);
+      }
+    };
+
+    fetchData();
+  }, []); // Run only once when the component mounts
+
+
   // const [cards, setCards] = useState([
   //   { id: 1, targetArea: 'Done' },
   //   { id: 2, targetArea: 'ToDo' },
   //   { id: 3, targetArea: 'ToDo' },
   //   { id: 4, targetArea: 'Backlog' },
   // ]);
+
+
+
   const openModal = () => {
     console.log("Opening modal");
 
@@ -104,8 +130,9 @@ export const Dashboard = () => {
                   <i className="fa-regular fa-copy" />
                 </div>
                   
-                  <Card/>
-
+                {todos.map((todo) => (
+              <Card key={todo._id} todo={todo} />
+            ))}
               </div>
             </div>
             {/* PROGRESS  */}
