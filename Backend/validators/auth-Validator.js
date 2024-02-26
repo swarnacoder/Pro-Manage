@@ -19,10 +19,10 @@ const signupSchema = z.object({
       .min(7, { message: "Password must be at least of 7 characters" })
       .max(1024, "Password can't be greater than 1024 characters"),
 
-    confirmpassword: z
+    confirmPassword: z
       .string({ required_error: " Confirm Password is required" })
       .min(7, { message: "Confirm Password must be at least of 7 characters" })
-      .max(1024, "Confirm  Password can't be greater than 1024 characters"),
+      .max(1024, {message: "Confirm  Password can't be greater than 1024 characters"}),
   });
   
 

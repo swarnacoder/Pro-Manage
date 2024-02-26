@@ -1,0 +1,141 @@
+import { useState, useEffect } from "react";
+import styles from "./Login.module.css";
+import { WelcomePage } from "../../components/WelcomePage/WelcomePage";
+import { NavLink, useNavigate } from "react-router-dom";
+import { MoonLoader } from "react-spinners";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+export const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+  //Handling the Input Values
+  const handleInput = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    setUser({
+      ...user,
+      [name]: value,
+    });
+  };
+  //Handling the form Submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // alert(user);
+    // console.log(user);
+    try {
+      const response = await fetch(`http://localhost:5000/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      });
+      if (response.ok) {
+        const res_data = await response.json();
+        console.log("Response from server", res_data);
+        setUser({ email: "", password: "" });
+        navigate("/dashboard");
+        toast.success("Login successful!", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+      // console.log(response);
+    } catch (error) {
+      console.log("Register: ", error);
+    
+    }
+  
+  };
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className={styles.loaderContainer}>
+        <MoonLoader color="#474444" />
+      </div>
+    );
+   
+  }
+  return (
+    <>
+      <section className={styles.login_mainContainer}>
+        <WelcomePage />
+        <section className={styles.login_container}>
+          <div>
+            <p className={styles.heading}> Login</p>
+          </div>
+          <br />
+          <form className={styles.login_form} onSubmit={handleSubmit}>
+            <label htmlFor="email" className={styles.labels}>
+              <i className=" fa-regular fa-envelope"></i>
+
+              <input
+                placeholder="Email"
+                className={styles.login_form_input}
+                type="email"
+                name="email"
+                id="email"
+                required
+                autoComplete="off"
+                value={user.email}
+                onChange={handleInput}
+              />
+            </label>
+            <label htmlFor="password" className={styles.labels}>
+              <i className="fa-solid fa-lock"></i>
+              <input
+                placeholder="Password"
+                className={styles.login_form_input}
+                type={showPassword ? "text" : "password"} // Toggle type
+                name="password"
+                id="password"
+                required
+                autoComplete="off"
+                value={user.password}
+                onChange={handleInput}
+              />
+              <i
+                className={`fa-regular fa-eye eye-icon ${
+                  showPassword ? "visible" : ""
+                }`} // Toggle visibility class
+                onClick={togglePasswordVisibility}
+              ></i>
+            </label>
+            <button className={styles.login_btn}>
+            
+              <NavLink className={styles.login_btn_navlink} to="/dashboard">Log in</NavLink>
+            </button>
+          </form>
+          <div className={styles.login_buttom}>
+            <p className={styles.buttom_text}>Have no account yet ? </p>
+            <button className={styles.login_register_btn}>
+              <NavLink
+                className={styles.login_register_btn_navlink}
+                to="/register"
+              >
+                Register
+              </NavLink>
+            </button>
+          </div>
+        </section>
+      </section>
+      <ToastContainer />
+
+    </>
+  );
+};

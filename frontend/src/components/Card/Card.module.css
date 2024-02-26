@@ -1,0 +1,70 @@
+.card_container{
+    width: 85%;
+    height: 10.4rem;
+    max-height: 23rem;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    /* padding: auto; */
+    /* gap: .5rem; */
+    font-family: Poppins;
+    border-radius: 1.4rem;
+    padding: 1rem 1rem 0 2rem;
+}
+.card_header{
+display: flex;
+justify-content: space-between;
+place-items: center;
+}
+.priority{
+    font-size: .5rem;
+    display: flex;
+    justify-content: space-between;
+}
+.title{
+    font-weight: 500;
+    font-size: 1.2rem;
+    color: black;
+    margin: 0px;
+}
+.card_checklist{
+    display: flex;
+    justify-content: space-between;
+    place-items: center;
+    font-family: Inter;
+    font-size: .9rem;
+    font-weight: 500;
+}
+.card_categories {
+    display: flex;
+    gap: .7rem;
+    justify-content: space-between;
+}
+.duedate {
+    margin: 0;
+    padding: 0;
+    background-color: #DBDBDB;
+    height: 1.5rem;
+    width: 3.5rem;
+    font-size: 0.5rem;
+    text-align: center;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.card_change_categories {
+    display: flex;
+    gap: 0.3rem; /* Adjust the gap as needed */
+}
+.categories{
+    width: auto;
+    height: 1.5rem;
+    border-radius: .5rem;
+    background-color: #DBDBDB;
+    font-size: .5rem;
+    font-weight: 500;
+    text-align: center;
+    border: none ;
+}

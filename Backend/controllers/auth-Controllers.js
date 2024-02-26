@@ -15,10 +15,10 @@ const home = async (req, res) => {
 const register = async (req, res) => {
   try {
     // console.log(req.body);
-    const { name, email, password, confirmpassword } = req.body;
+    const { name, email, password, confirmPassword } = req.body;
 
   // Check if the password and confirm password match
-  if (password !== confirmpassword) {
+  if (password !== confirmPassword) {
     return res.status(400).json({ msg: "Password and Confirm Password do not match" });
   }
 
