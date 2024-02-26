@@ -19,12 +19,13 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-
+// Json WEB TOKEN 
 userSchema.methods.generateToken = async function () {
     try {
         return jwt.sign ({
            userID: this._id.toString(),
            email: this.email,
+           name: this.name,
            isAdmin: this.isAdmin 
         },
         process.env.JWT_SECRET_KEY,

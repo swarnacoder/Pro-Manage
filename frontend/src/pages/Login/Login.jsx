@@ -3,8 +3,9 @@ import styles from "./Login.module.css";
 import { WelcomePage } from "../../components/WelcomePage/WelcomePage";
 import { NavLink, useNavigate } from "react-router-dom";
 import { MoonLoader } from "react-spinners";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import  { useAuth } from "../../Context/auth"
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,6 +18,8 @@ export const Login = () => {
     password: "",
   });
   const navigate = useNavigate();
+  const { storeTokenInLS } = useAuth()
+
   //Handling the Input Values
   const handleInput = (e) => {
     let name = e.target.name;
@@ -40,17 +43,24 @@ export const Login = () => {
         body: JSON.stringify(user),
       });
       if (response.ok) {
-        const res_data = await response.json();
-        console.log("Response from server", res_data);
+        alert("Login successful!")
+        const res_data = await response.json()
+        console.log("res from server", res_data)
+        storeTokenInLS(res_data.token) 
         setUser({ email: "", password: "" });
+
         navigate("/dashboard");
-        toast.success("Login successful!", {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        // toast.success("Login successful!", {
+        //   position: toast.POSITION.TOP_RIGHT,
+        // });
+      }
+
+      else {
+        alert("INVALID CREDENTIALS")
       }
       // console.log(response);
     } catch (error) {
-      console.log("Register: ", error);
+      console.log("Login: ", error);
     
     }
   
@@ -117,8 +127,8 @@ export const Login = () => {
               ></i>
             </label>
             <button className={styles.login_btn}>
-            
-              <NavLink className={styles.login_btn_navlink} to="/dashboard">Log in</NavLink>
+            Log in
+              {/* <NavLink className={styles.login_btn_navlink} to="/dashboard">Log in</NavLink> */}
             </button>
           </form>
           <div className={styles.login_buttom}>

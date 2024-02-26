@@ -127,4 +127,4 @@ const register = async (req, res) => {
   
 
 
-module.exports = { home, register, login, updateSettings };
+module.exports = { home, register, login, user, updateSettings };

@@ -3,8 +3,9 @@ import { WelcomePage } from "../../components/WelcomePage/WelcomePage";
 import styles from "./Register.module.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import { MoonLoader } from "react-spinners";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import  { useAuth } from "../../Context/auth"
 
 export const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +16,8 @@ export const Register = () => {
     confirmPassword: "",
     password: "",
   });
+
+
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
@@ -31,6 +34,9 @@ export const Register = () => {
     password: "",
   });
   const navigate = useNavigate();
+  const { storeTokenInLS } = useAuth()
+  
+  //Handelling the input value 
   const handleInput = (e) => {
     let name = e.target.name;
     let value = e.target.value;
@@ -68,14 +74,15 @@ export const Register = () => {
     return errors;
   };
 
-  const handleSubmit = async (e) => {
+  //Handling the form Submission
+const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = validateForm();
     setValidationErrors(errors);
 
     if (Object.keys(errors).length === 0) {
       // alert(user);
-      console.log(user);
+      // console.log(user);
       try {
         const response = await fetch(
           `http://localhost:5000/api/auth/register`,
@@ -88,7 +95,12 @@ export const Register = () => {
           }
         );
         if (response.ok) {
+          alert("Registration successful!")
+          const res_data = await response.json()
+          console.log("res from server", res_data)
+          storeTokenInLS(res_data.token) 
           setUser({ name: "", email: "", confirmPassword: "", password: "" });
+
           navigate("/login");
           // toast.success("Login successful!", {
           //   position: toast.POSITION.TOP_RIGHT,

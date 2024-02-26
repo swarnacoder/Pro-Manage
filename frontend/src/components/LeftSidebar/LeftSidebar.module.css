@@ -36,7 +36,7 @@
 .navigateHeader {
   background-color: #fff;
   height: 85%;
-  padding-right: 2rem;
+  /* padding-right: 2rem; */
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -45,6 +45,7 @@
 .btnDashboard,
 .btnAnalytics,
 .btnCreatequiz {
+  width: 80%;
   font-family: Poppins;
   font-weight: 500;
   font-size: 1rem;
@@ -52,7 +53,10 @@
   color: #474444;
   border: none;
   place-items: center;
-  
+  place-items: center;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
 
   /* 
     width: 176px;
@@ -67,7 +71,7 @@
     margin-left: 8vh; */
 }
 
-.btnLogout {
+/* .btnLogout {
   background-color: transparent;
   width: 5rem;
   height: 1.5rem;
@@ -83,4 +87,95 @@
   place-items: center;
   justify-content: center;
   align-items: center;
+} */
+
+/* LOGOUT POP UP  */
+
+.btnLogout {
+  text-decoration: none;
+  background-color: transparent;
+  width: 15rem;
+  height: 1.5rem;
+  font-family: Poppins;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #cf3636;
+  border: none;
+  place-items: center;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+body.active-modal {
+  overflow-y: hidden;
+}
+.modal,
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+}
+.overlay {
+  background: rgba(49, 49, 49, 0.8);
+}
+.modal_container {
+  height: 13rem;
+  width: 20rem;
+  position: absolute;
+  top: 55%;
+  left: 52%;
+  transform: translate(-50%, -50%);
+  /* line-height: 1.4; */
+  background: #f1f1f1;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+}
+.modal_text {
+  font-family: Noto Sans;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: center;
+}
+.modal_buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.8rem;
+}
+.modal_logout {
+  /* width: 21rem; */
+  height: 2.5rem;
+  border-radius: 0.8rem;
+  background-color: #17a2b8;
+  color: #ffffff;
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  justify-content: center;
+  text-decoration: none;
+}
+.modal_cancel {
+  height: 2.5rem;
+  border: 1px solid #cf3636;
+  background-color: transparent;
+  color: #cf3636;
+  border-radius: 0.8rem;
+  font-family: Poppins;
+  font-weight: 600;
+  font-size: 1rem;
+}
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 7px;
 }
