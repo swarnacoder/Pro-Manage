@@ -31,6 +31,7 @@ const authMiddleware = async (req, res, next) => {
     req.token = token;
     req.user = userData;
     req.userID = userData._id;
+console.log("user:", userData)
 
     // Move on to the next middleware or route handler
     next();

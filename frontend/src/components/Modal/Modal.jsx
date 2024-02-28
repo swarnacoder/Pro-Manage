@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./Modal.module.css";
 import doticon from "../../assets/icons/doticon.png";
+import { useAuth } from "../../Context/auth";
 
 const Modal = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,9 @@ const Modal = ({ onClose }) => {
     dueDate: "",
     checklistItems: [{ text: "", completed: false }],
   });
+  const { user, storeTokenInLS } = useAuth();
+const token = localStorage.getItem("token")
+
 
   // const [selectedPriority, setSelectedPriority] = useState();
   // const [checklistItems, setChecklistItems] = useState([
@@ -78,7 +82,11 @@ const Modal = ({ onClose }) => {
           checklist,
           dueDate,
         }),
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" ,
+        "Authorization": `Bearer ${token}`,
+
+      
+      },
       });
       if (response.ok) {
         onClose();

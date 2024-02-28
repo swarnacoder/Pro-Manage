@@ -15,7 +15,14 @@ export const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/v1/todos");
+        const token = localStorage.getItem("token");
+
+        const response = await fetch("http://localhost:5000/api/v1/todos", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+          
         if (response.ok) {
           const data = await response.json();
           setTodos(data.todos);

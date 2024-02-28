@@ -37,11 +37,11 @@ const todoSchema = new mongoose.Schema({
     //     enum: ['ToDo', 'BackLog', 'Done', 'InProgress'],
     //     default: 'ToDo',
     // },
-    // user: {
-    //     type: mongoose.Schema.ObjectId,
-    //     ref: "User",
-    //     required: true,
-    // },
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+        required: true,
+    },
 
     isTodo: {
     type : String ,

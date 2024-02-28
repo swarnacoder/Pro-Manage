@@ -4,6 +4,7 @@ const Todo = require("../model/todo-Model");
 //Create A TODO
 exports.createTodo = async (req, res, next) => {
   try {
+    req.body.user = req.user.id
     const todo = new Todo(req.body);
     await todo.save();
     res.status(201).json({
@@ -19,8 +20,10 @@ exports.createTodo = async (req, res, next) => {
 //GET ALL TODO CARD
 exports.getAllTodos = async (req, res, next) => {
   try {
-    const todos = await Todo.find();
-    res.status(200).json({
+const userId = req.user.id    
+
+const todos = await Todo.find({ user: userId });
+res.status(200).json({
       success: true,
       todos,
       todoCount: todos.length,
