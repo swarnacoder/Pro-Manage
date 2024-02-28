@@ -174,6 +174,7 @@ const handleSubmit = async (e) => {
             {validationErrors.email && (
               <span className={styles.error}>{validationErrors.email}</span>
             )}
+
             <label htmlFor="confirmPassword" className={styles.labels}>
               <i className="fa-solid fa-lock"></i>
               <input
@@ -194,6 +195,7 @@ const handleSubmit = async (e) => {
                 onClick={toggleConfirmPasswordVisibility}
               ></i>
             </label>
+
             {validationErrors.confirmPassword && (
               <span className={styles.error}>
                 {validationErrors.confirmPassword}
@@ -220,6 +222,7 @@ const handleSubmit = async (e) => {
                 onClick={togglePasswordVisibility}
               ></i>
             </label>
+            
             {validationErrors.password && (
               <span className={styles.error}>{validationErrors.password}</span>
             )}

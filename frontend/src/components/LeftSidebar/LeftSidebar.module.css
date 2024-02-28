@@ -1,7 +1,7 @@
 .leftSidebar {
   width: 15%; /* 30% width */
   height: 100vh; /* Full height */
-  background-color: #7ae154;
+  /* background-color: #7ae154; */
   /* background-color: #fff;  */
   display: flex;
   flex-direction: column;
@@ -10,7 +10,7 @@
   box-sizing: border-box;
 }
 .headerSection {
-  background-color: #9c3333;
+  /* background-color: #9c3333; */
   height: 10%;
   width: 100%;
   display: flex;
@@ -108,6 +108,10 @@
 }
 body.active-modal {
   overflow-y: hidden;
+}
+.footer {
+  z-index: 20;
+
 }
 .modal,
 .overlay {

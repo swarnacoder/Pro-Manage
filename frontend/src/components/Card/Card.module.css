@@ -1,4 +1,5 @@
 .card_container{
+    z-index: 10;
     width: 85%;
     height: 10.4rem;
     max-height: 23rem;
@@ -60,7 +61,7 @@ place-items: center;
 }
 .categories{
     width: auto;
-    height: 1.5rem;
+    height: 1.rem;
     border-radius: .5rem;
     background-color: #DBDBDB;
     font-size: .5rem;
@@ -68,3 +69,44 @@ place-items: center;
     text-align: center;
     border: none ;
 }
+
+.dropdownButton {
+    position: sticky;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    /* padding: 0;
+    margin: 0; */
+    font-size: 1.5rem;
+    color: #474444;
+  }
+
+  .dropdownContent {
+    /* position: absolute; */
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 8px 0;
+    z-index: 1;
+  }
+  .dropdownItemBtn {
+    /* display: block; */
+    width: 100%;
+    padding: 8px 16px;
+    text-align: left;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: #474444;
+    text-decoration: none;
+  }
+  
+  .dropdownItemBtn:hover {
+    background-color: #841e1e;
+  }
+ 

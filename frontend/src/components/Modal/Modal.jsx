@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import styles from "./Modal.module.css";
-
-
+import doticon from "../../assets/icons/doticon.png";
 
 const Modal = ({ onClose }) => {
-
   const [formData, setFormData] = useState({
     title: "",
     selectedPriority: "High", // athi gote default priority selsect in modal
@@ -12,22 +10,17 @@ const Modal = ({ onClose }) => {
     checklistItems: [{ text: "", completed: false }],
   });
 
-
-
   // const [selectedPriority, setSelectedPriority] = useState();
   // const [checklistItems, setChecklistItems] = useState([
   //   { text: "", completed: false }, // Initial checklist item
   // ]);
 
-
   const handleChecklistChange = (index, event) => {
     const updatedChecklist = formData.checklistItems.map((item, i) =>
       i === index ? { ...item, completed: event.target.checked } : item
-      //athi checked item ta rerender jamti habani code add karichi
     );
     setFormData({ ...formData, checklistItems: updatedChecklist });
   };
-
 
   const handleAddItem = () => {
     setFormData({
@@ -39,37 +32,57 @@ const Modal = ({ onClose }) => {
     });
   };
 
-
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { title, dueDate, selectedPriority, checklistItems } = formData;
-    console.log("Form Data:", formData); 
+
+    // Due Date Validation
+    const currentDate = new Date();
+    const selectedDate = new Date(dueDate);
+    const oneDayLater = new Date(
+      currentDate.setDate(currentDate.getDate() + 1)
+    );
+    if (selectedDate <= oneDayLater) {
+      console.error(
+        "Due date must be at least one day more than the current date."
+      );
+      return;
+    }
+
+    // Checklist Item Validation
+    const hasEmptyChecklistItem = checklistItems.some(
+      (item) => item.text.trim() === ""
+    );
+    if (hasEmptyChecklistItem) {
+      console.error(
+        "Please enter your task to be done for all checklist items."
+      );
+      return;
+    }
+
+    console.log("Form Data:", formData);
     // Check if a priority is selected
     if (!selectedPriority) {
       console.error("Please select a priority.");
       return; // Stop form submission if priority is not selected
     }
     // Create checklist array
-    const checklist = checklistItems.map((item) => ({
-      text: item.text,
-    }));
+    const checklist = checklistItems.map((item) => ({ text: item.text }));
+
     try {
       const response = await fetch("http://localhost:5000/api/v1/todo/new", {
         method: "POST",
         body: JSON.stringify({
           title,
-          priority: selectedPriority, // athi Include selected priority
+          priority: selectedPriority,
           checklist,
           dueDate,
         }),
         headers: { "Content-Type": "application/json" },
       });
       if (response.ok) {
-        // Handle successful submission (e.g., close modal, display success message)
         onClose();
       } else {
-        // Handle error (e.g., display error message)
         console.error("Error creating todo:", response.statusText);
       }
     } catch (error) {
@@ -79,17 +92,15 @@ const Modal = ({ onClose }) => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    console.log("Field Name:", name, "Value:", value); //console karichi Log field name and value
+    console.log("Field Name:", name, "Value:", value);
     setFormData({ ...formData, [name]: value });
   };
 
   return (
     <>
       <div className={styles.modalContainer}>
-        <div className={styles.modalContent}>
-          {/* <div className={styles.modal}>
         <div className={styles.overlay}></div>
-        <div className={styles.modal_content}> */}
+        <div className={styles.modalContent}>
           <form onSubmit={handleSubmit} className={styles.modal_form}>
             <div className={styles.title_head}>
               <label className={styles.priority_text} htmlFor="">
@@ -104,8 +115,8 @@ const Modal = ({ onClose }) => {
                 onChange={handleChange}
                 placeholder="Enter Task Title"
               />
-
             </div>
+
             <div className={styles.priorityContainer}>
               <label className={styles.priority_text}>Select Priority:</label>
               {["High", "Moderate", "Low"].map((priority) => (
@@ -119,10 +130,10 @@ const Modal = ({ onClose }) => {
                     setFormData({ ...formData, selectedPriority: priority })
                   }
                 >
+                  <img src={doticon} alt="" />
                   {priority} Priority
                 </button>
               ))}
-              
             </div>
 
             <div className={styles.checklist}>
@@ -130,38 +141,47 @@ const Modal = ({ onClose }) => {
                 Checklist ({formData.checklistItems.length}/
                 {formData.checklistItems.length})
               </p>
-              {formData.checklistItems.map((item, index) => (
-                <div key={index} className={styles.checklistItem}>
-                  <input
-                    type="checkbox"
-                    checked={item.completed}
-                    onChange={(e) => handleChecklistChange(index, e)}
-                    //athi checked item ta rerender na haba au form jamti defult submit na haba sethi pain logic change karichi kindly look into it
-                  />
-                  
-                  <input
-                    type="text"
-                    name={`checklist[${index}]`}
-                    value={item.text}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        checklistItems: formData.checklistItems.map(
-                          (prevItem, i) =>
-                            i === index
-                              ? { ...prevItem, text: e.target.value }
-                              : prevItem
-                        ),
-                      })
-                    }
-                    className={styles.checklistItemInput}
-                  />
-                </div>
-              ))}
-              <button onClick={handleAddItem}>
-                <span>+</span> Add New
-              </button>
+              <div className={styles.checklist_section}>
+                {formData.checklistItems.map((item, index) => (
+                  <div key={index} className={styles.checklistItem}>
+                    <label htmlFor="" className="checklist_input_label">
+                      <input
+                        className={styles.checklist_Input}
+                        type="checkbox"
+                        checked={item.completed}
+                        onChange={(e) => handleChecklistChange(index, e)}
+                      />
+
+                      <input
+                        type="text"
+                        name={`checklist[${index}]`}
+                        value={item.text}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            checklistItems: formData.checklistItems.map(
+                              (prevItem, i) =>
+                                i === index
+                                  ? { ...prevItem, text: e.target.value }
+                                  : prevItem
+                            ),
+                          })
+                        }
+                        placeholder="Task To Be Done"
+                        className={styles.checklistItemInput}
+                      />
+                    </label>
+                    <i
+                      className="fa-solid fa-trash"
+                      style={{ color: "#da200b" }}
+                    ></i>
+                  </div>
+                ))}
+              </div>
             </div>
+            <button onClick={handleAddItem} className={styles.addchecklist}>
+              <span>+</span> Add New
+            </button>
             <div className={styles.modal_btns}>
               <input
                 type="date"
@@ -183,8 +203,6 @@ const Modal = ({ onClose }) => {
               </div>
             </div>
           </form>
-          {/* </div> */}
-          {/* </div> */}
         </div>
       </div>
     </>

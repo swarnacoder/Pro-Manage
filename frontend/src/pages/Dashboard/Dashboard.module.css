@@ -1,5 +1,5 @@
 .dashboardMaincontainer {
-  background-color: red;
+  /* background-color: red; */
   /* background-color: #de33bc; */
   height: 100vh;
   width: 100vw;
@@ -8,7 +8,7 @@
   overflow-x: hidden;
 }
 .dashboardContainer {
-  background-color: #6b0909;
+  /* background-color: #6b0909; */
   width: 85%;
   height: 100vh;
   display: flex;
@@ -19,7 +19,7 @@
 .navbar {
   /* width: 85%; */
   height: 10%;
-  background-color: #2d18a0;
+  /* background-color: #2d18a0; */
   display: flex;
   justify-content: space-between;
   padding-left: 1.5rem;
@@ -38,7 +38,7 @@
   color: #707070;
 }
 .heading {
-  background-color: #8b6bc7;
+  /* background-color: #8b6bc7; */
   height: 10%;
   display: flex;
   justify-content: space-between;
@@ -78,7 +78,7 @@
 
 /* ################BOX */
 .mainBoxContainer {
-  background-color: #0b0101;
+  /* background-color: #0b0101; */
   overflow-x: auto;
   display: flex;
   gap: 1rem;
@@ -87,18 +87,27 @@
   width: 100%;
 }
 .boxContainer {
-  background-color: #b7e02f;
+  background-color: #EEF2F5;
+  /* background-color: yellow; */
   width: 22rem;
   height: 100%;
   overflow-y: scroll;
   flex-shrink: 0;
   border-radius: 1rem;
   font-style: Poppins;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  /* justify-content: center; */
+  align-items: center;
 }
 .box {
-  background-color: #3ecfdf;
+  position: sticky;
+  width: 90%;
+  /* background-color: #fff; */
+  /* background-color: #3ecfdf; */
   border-radius: 1rem;
-
+place-items: center;
   height: 10%;
   display: flex;
   justify-content: space-between;
@@ -108,3 +117,15 @@
   cursor: pointer;
   text-align: center;
 }
+.cardbox{
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  place-items: center;
+  width: 95%;
+}
+.plusbutton{
+  border: none;
+  font-size: 1.5rem;
+}
+

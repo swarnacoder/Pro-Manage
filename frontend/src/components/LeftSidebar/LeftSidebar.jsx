@@ -1,4 +1,4 @@
-import React, { useState  } from "react";
+import React, { useState } from "react";
 import styles from "./LeftSidebar.module.css";
 import { useNavigate } from "react-router-dom";
 import logout from "../../assets/icons/Logout.png";
@@ -37,7 +37,10 @@ export const LeftSidebar = () => {
 
         <div className={styles.navigateContainer}>
           <div className={styles.navigateHeader}>
-            <button className={styles.btnDashboard}>
+            <button
+              className={styles.btnDashboard}
+              onClick={() => handleButtonClick("/dashboard")}
+            >
               <img src={board} alt="board" styles={{ height: "1rem" }} />
               Board
             </button>
@@ -80,7 +83,6 @@ export const LeftSidebar = () => {
                       className={styles.modal_logout}
                     >
                       <NavLink className={styles.modal_logout} to="/login">
-                       
                         Yes, Logout
                       </NavLink>
                     </button>
@@ -88,7 +90,6 @@ export const LeftSidebar = () => {
                       className={styles.modal_cancel}
                       onClick={toggleModal}
                     >
-                     
                       Cancel
                     </button>
                   </div>

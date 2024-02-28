@@ -101,14 +101,14 @@ const register = async (req, res) => {
   const updateSettings = async (req, res) => {
     try {
       const { email, oldPassword, newPassword, newName } = req.body;
-  
+  console.log("user data ",req.body)
       // Validate old password and retrieve user
       const user = await User.findOne({ email });
       if (!user || !(await bcrypt.compare(oldPassword, user.password))) {
         return res.status(401).json({ error: "Incorrect old password or user not found" });
       }
   
-      // Update name if provided
+      // Update name 
       if (newName) {
         user.name = newName;
       }
