@@ -127,5 +127,11 @@ place-items: center;
 .plusbutton{
   border: none;
   font-size: 1.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
+.createBtn{
+  width: 80%;
 
+}

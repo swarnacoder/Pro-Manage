@@ -5,13 +5,61 @@ import styles from "./Card.module.css";
 import arrowUp from "../../assets/icons/arrow_up.png";
 import arrowDown from "../../assets/icons/arrow_down.png";
 
-const Card = ({ todo }) => {
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const Card = ({ todo, onCardMove }) => {
   const [expand, setExpand] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
+  };
+
+  // category move WORKING CODE
+  const handleMoveButtonClick = (newTargetArea) => {
+    onCardMove(newTargetArea);
+  };
+
+  const handleShareIconClick = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://localhost:5000/api/v1/todo/${todo._id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const todoLink = `http://localhost:5000/api/v1/todo/${todo._id}`;
+        navigator.clipboard
+          .writeText(todoLink)
+          .then(() => {
+            toast.success("Link copied to Clipboard", {
+              position: "top-right",
+              autoClose: 1400,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          })
+          .catch((error) => {
+            console.error("Error copying todo link to clipboard:", error);
+          });
+      } else {
+        console.error("Error fetching todo:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error sharing todo:", error);
+    }
   };
 
   return (
@@ -26,18 +74,21 @@ const Card = ({ todo }) => {
               </button>
               {isOpen && (
                 <div className={styles.dropdownContent}>
-                  <button className={styles.dropdownItemBtn} 
-                  // onClick={onEdit}
+                  <button
+                    className={styles.dropdownItemBtn}
+                    // onClick={onEdit}
                   >
                     Edit
                   </button>
-                  <button className={styles.dropdownItemBtn} 
-                  // onClick={onShare}
+                  <button
+                    className={styles.dropdownItemBtn}
+                    onClick={handleShareIconClick}
                   >
                     Share
                   </button>
-                  <button className={styles.dropdownItemBtn} 
-                  // onClick={onDelete}
+                  <button
+                    className={styles.dropdownItemBtn}
+                    // onClick={onDelete}
                   >
                     Delete
                   </button>
@@ -77,18 +128,106 @@ const Card = ({ todo }) => {
             </div>
             <div className={styles.card_categories}>
               <p className={styles.duedate}>
-                {" "}
                 {new Date(todo.dueDate).toLocaleDateString()}{" "}
               </p>
+
+
+{/* WORKING CODE  */}
               <div className={styles.card_change_categories}>
-                <button className={styles.categories}> BACKLOG </button>
-                <button className={styles.categories}> PROGRESS </button>
-                <button className={styles.categories}> DONE </button>
+                {todo.targetArea === "ToDo" && (
+                  <>
+                    <button
+                      className={styles.categories}
+                      onClick={() => handleMoveButtonClick("Backlog")}
+                    >
+                      BACKLOG
+                    </button>
+                    <button
+                      className={styles.categories}
+                      onClick={() => handleMoveButtonClick("In Progress")}
+                    >
+                      IN PROGRESS
+                    </button>
+                    <button
+                      className={styles.categories}
+                      onClick={() => handleMoveButtonClick("Done")}
+                    >
+                      DONE
+                    </button>
+                  </>
+                )}
+                {todo.targetArea === "In Progress" && (
+                  <>
+                    <button
+                      className={styles.categories}
+                      onClick={() => handleMoveButtonClick("Backlog")}
+                    >
+                      BACKLOG
+                    </button>
+                    <button
+                      className={styles.categories}
+                      onClick={() => handleMoveButtonClick("ToDo")}
+                    >
+                      TO DO
+                    </button>
+                    <button
+                      className={styles.categories}
+                      onClick={() => handleMoveButtonClick("Done")}
+                    >
+                      DONE
+                    </button>
+                  </>
+                )}
+                {todo.targetArea === "Done" && (
+                  <>
+                    <button
+                      className={styles.categories}
+                      onClick={() => handleMoveButtonClick("Backlog")}
+                    >
+                      BACKLOG
+                    </button>
+                    <button
+                      className={styles.categories}
+                      onClick={() => handleMoveButtonClick("ToDo")}
+                    >
+                      TO DO
+                    </button>
+                    <button
+                      className={styles.categories}
+                      onClick={() => handleMoveButtonClick("In Progress")}
+                    >
+                      IN PROGRESS
+                    </button>
+                  </>
+                )}
+                {todo.targetArea === "Backlog" && (
+                  <>
+                    <button
+                      className={styles.categories}
+                      onClick={() => handleMoveButtonClick("Done")}
+                    >
+                      Done
+                    </button>
+                    <button
+                      className={styles.categories}
+                      onClick={() => handleMoveButtonClick("ToDo")}
+                    >
+                      TO DO
+                    </button>
+                    <button
+                      className={styles.categories}
+                      onClick={() => handleMoveButtonClick("In Progress")}
+                    >
+                      IN PROGRESS
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </>
         )}
       </section>
+      <ToastContainer />
     </>
   );
 };

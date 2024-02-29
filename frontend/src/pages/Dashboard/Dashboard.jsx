@@ -10,8 +10,6 @@ export const Dashboard = () => {
 
   const [todos, setTodos] = useState([]);
 
-
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,7 +20,7 @@ export const Dashboard = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-          
+
         if (response.ok) {
           const data = await response.json();
           setTodos(data.todos);
@@ -60,7 +58,7 @@ export const Dashboard = () => {
   const openModal = () => {
     console.log("Opening modal");
 
-    setIsModalOpen(true); 
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
@@ -77,59 +75,94 @@ export const Dashboard = () => {
   //   );
   // };
 
-// TO GET THE USER NAME AND DATE 
-const { user } = useAuth();
-const currentDate = new Date();
+  // TO GET THE USER NAME AND DATE
+  const { user } = useAuth();
+  const currentDate = new Date();
 
-// Format day with ordinal suffix (e.g., 1st, 2nd, 3rd, 4th)
-const dayWithOrdinal = (date) => {
-  const day = date.getDate();
-  const suffix = (day >= 11 && day <= 13) ? 'th' : ['th', 'st', 'nd', 'rd', 'th'][day % 10 - 1];
-  return `${day.toString().padStart(2, '0')}${suffix}`; // Ensure two-digit representation
-};
+  // Format day with ordinal suffix (e.g., 1st, 2nd, 3rd, 4th)
+  const dayWithOrdinal = (date) => {
+    const day = date.getDate();
+    const suffix =
+      day >= 11 && day <= 13
+        ? "th"
+        : ["th", "st", "nd", "rd", "th"][(day % 10) - 1];
+    return `${day.toString().padStart(2, "0")}${suffix}`; // Ensure two-digit representation
+  };
 
-// Set options for day (2-digit) and month (short)
-const options = { year: 'numeric', month: 'short', day: '2-digit' };
+  // Set options for day (2-digit) and month (short)
+  const options = { year: "numeric", month: "short", day: "2-digit" };
 
-const formattedDate = currentDate.toLocaleDateString('en-US', options);
-const formattedDateWithOrdinal = formattedDate.replace(dayWithOrdinal(currentDate), formattedDate);
+  const formattedDate = currentDate.toLocaleDateString("en-US", options);
+  const formattedDateWithOrdinal = formattedDate.replace(
+    dayWithOrdinal(currentDate),
+    formattedDate
+  );
 
-console.log(formattedDateWithOrdinal); 
+  console.log(formattedDateWithOrdinal);
 
+  // MOVE CARD FROMM CATEGORY TO CATEGORY
 
+  // const moveCardTo = async (cardId, targetArea) => {
+  //   try {
+  //     const response = await fetch(`http://localhost:5000/api/v1/todo/${cardId}`, {
+  //       method: "PUT",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ targetArea }),
+  //     });
 
+  //     if (response.ok) {
+  //       const updatedTodos = todos.map((todo) =>
+  //         todo._id === cardId ? { ...todo, targetArea } : todo
+  //       );
 
+  //       setTodos(updatedTodos);
+  //     } else {
+  //       console.error("Error moving card:", response.statusText);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error moving card:", error);
+  //   }
+  // };
+  // const handleCardMove = (cardId, targetArea) => {
+  //   moveCardTo(cardId, targetArea);
+  // };
 
-// MOVE CARD FROMM CATEGORY TO CATEGORY 
+  // CATEGORY CHANGE OF CARD  WORKING CODE
+  const moveCardTo = async (cardId, targetArea) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(
+        `http://localhost:5000/api/v1/todo/${cardId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ targetArea }),
+        }
+      );
 
-// const moveCardTo = async (cardId, targetArea) => {
-//   try {
-//     const response = await fetch(`http://localhost:5000/api/v1/todo/${cardId}`, {
-//       method: "PUT",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({ targetArea }),
-//     });
+      if (response.ok) {
+        const updatedTodos = todos.map((todo) =>
+          todo._id === cardId ? { ...todo, targetArea } : todo
+        );
 
-//     if (response.ok) {
-//       const updatedTodos = todos.map((todo) =>
-//         todo._id === cardId ? { ...todo, targetArea } : todo
-//       );
+        setTodos(updatedTodos);
+      } else {
+        console.error("Error moving card:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error moving card:", error);
+    }
+  };
 
-//       setTodos(updatedTodos);
-//     } else {
-//       console.error("Error moving card:", response.statusText);
-//     }
-//   } catch (error) {
-//     console.error("Error moving card:", error);
-//   }
-// };
-// const handleCardMove = (cardId, targetArea) => {
-//   moveCardTo(cardId, targetArea);
-// };
-
-
+  const handleCardMove = async (cardId, targetArea) => {
+    // Move the card to the selected target area
+    moveCardTo(cardId, targetArea);
+  };
 
   return (
     <>
@@ -137,8 +170,8 @@ console.log(formattedDateWithOrdinal);
         <LeftSidebar />
         <section className={styles.dashboardContainer}>
           <div className={styles.navbar}>
-            <p className={styles.nameHeading}> Welcome !  {user.name} </p>
-            <p className={styles.date}> { formattedDateWithOrdinal }</p>
+            <p className={styles.nameHeading}> Welcome ! {user.name} </p>
+            <p className={styles.date}> {formattedDateWithOrdinal}</p>
           </div>
 
           {/* Board heading  */}
@@ -154,7 +187,7 @@ console.log(formattedDateWithOrdinal);
             </div>
           </div>
 
-          <section className={styles.mainBoxContainer}>
+          {/* <section className={styles.mainBoxContainer}> */}
             {/* <div className={styles.sectionArea}>
               {["Backlog", "ToDo", "In-Progress", "Done"].map((area) => (
                 <div key={area} className={styles.areas}>
@@ -183,7 +216,7 @@ console.log(formattedDateWithOrdinal);
               ))}
             </div> */}
 
-            {/* BACKLOG  */}
+            {/* BACKLOG 
 
             <div className={styles.boxContainer}>
               <div className={styles.box}>
@@ -191,7 +224,7 @@ console.log(formattedDateWithOrdinal);
                 <i className="fa-regular fa-copy" />
               </div>
             </div>
-            {/* TODO  */}
+            TODO 
             <div className={styles.boxContainer}>
               <div className={styles.box}>
                 <p className={styles.category}>To Do</p>
@@ -208,58 +241,57 @@ console.log(formattedDateWithOrdinal);
               
               </div>
             </div>
-            {/* PROGRESS  */}
+            PROGRESS 
             <div className={styles.boxContainer}>
               <div className={styles.box}>
                 <p className={styles.category}>In Progress</p>
                 <i className="fa-regular fa-copy" />
               </div>
             </div>
-            {/* DONE  */}
+            DONE 
             <div className={styles.boxContainer}>
               <div className={styles.box}>
                 <p className={styles.category}>Done</p>
                 <i className="fa-regular fa-copy" />
               </div>
-            </div>
-         
+            </div> */}
 
-
-
-
-          {/* <section className={styles.mainBoxContainer}>
-            <div className={styles.boxContainer}>
-              <div className={styles.box}>
-                <p className={styles.category}>To Do</p>
-                <div className={styles.boxIcon}>
-                  <button onClick={openModal} className={styles.plusbutton}>
-                    {" "}
-                    +
-                  </button>
-                  <i className="fa-regular fa-copy" />
+            {/* WORKING CODE  */}
+            <section className={styles.mainBoxContainer}>
+              {["Backlog", "ToDo", "In Progress", "Done"].map((area) => (
+                //{TODO (
+                <div key={area} className={styles.boxContainer}>
+                  <div className={styles.box}>
+                    <p className={styles.category}>{area}</p>
+                    {area === "ToDo" && (
+                      <div className={styles.createBtn}>
+                      <button onClick={openModal} className={styles.plusbutton}>
+                    
+                        +
+                      </button>
+                      </div>
+                    )}
+                    <i className="fa-regular fa-copy" />
+                  </div>
+                  <div className={styles.cardbox}>
+                    {todos
+                      .filter((todo) => todo.targetArea === area)
+                      .map((todo) => (
+                        <Card
+                          key={todo._id}
+                          todo={todo}
+                          onCardMove={(newTargetArea) =>
+                            handleCardMove(todo._id, newTargetArea)
+                          }
+                        />
+                      ))}
+                  </div>
                 </div>
-              </div>
-              <div className={styles.cardbox}>
-                {todos.map((todo) => (
-                  <Card
-                    key={todo._id}
-                    todo={todo}
-                    onCardMove={(targetArea) => handleCardMove(todo._id, targetArea)}
-                  />
-                ))}
-              </div>
-            </div>
-          </section> */}
-
-
-          </section>
-
+              ))}
+            </section>
+          {/* </section> */}
         </section>
       </section>
-
-
-
-
 
       {isModalOpen && <Modal onClose={closeModal} />}
     </>

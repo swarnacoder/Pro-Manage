@@ -45,7 +45,7 @@ exports.getTodoDetails = async (req, res, next) => {
   });
 };
 
-//Update Todo 
+//Update  Edit Todo 
 exports.updateTodo = async (req, res, next) => {
   let todo = await Todo.findById(req.params.id);
   if (!todo) {
@@ -82,3 +82,40 @@ exports.deleteTodo = async (req, res, next) => {
     });
   }
 };
+
+exports.changeCategory  = async (req, res, next) => {
+  try {
+    let todo = await Todo.findById(req.params.id);
+    if (!todo) {
+      return res.status(404).json({ msg: "Todo Not Found" });
+    }
+
+    const { targetArea } = req.body;
+
+    if (targetArea) {
+      // If the targetArea is provided in the request body, update it
+      todo = await Todo.findByIdAndUpdate(
+        req.params.id,
+        { targetArea },
+        { new: true, runValidators: true, useFindAndModify: false }
+      );
+    } else {
+      // If targetArea is not provided, update other fields (title, priority, etc.)
+      todo = await Todo.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true, runValidators: true, useFindAndModify: false }
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      todo,
+    });
+  } catch (error) {
+    console.error("Error updating todo:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+

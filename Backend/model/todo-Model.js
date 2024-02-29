@@ -43,22 +43,29 @@ const todoSchema = new mongoose.Schema({
         required: true,
     },
 
-    isTodo: {
-    type : String ,
-   default: true,
-},
-    isProgress: {
-    type : String ,
-   default: false,
-},
-    isBcaklog: {
-    type : String ,
-   default: false,
-},
-    isDone: {
-    type : String ,
-   default: false,
-},
+    targetArea: {
+        type: String,
+        enum: ["Backlog", "ToDo", "In Progress", "Done"],
+        default: "ToDo",
+      },
+
+
+//     isTodo: {
+//     type : String ,
+//    default: true,
+// },
+//     isProgress: {
+//     type : String ,
+//    default: false,
+// },
+//     isBcaklog: {
+//     type : String ,
+//    default: false,
+// },
+//     isDone: {
+//     type : String ,
+//    default: false,
+// },
 
     createdDate: {
         type: Date,

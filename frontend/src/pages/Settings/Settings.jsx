@@ -12,6 +12,8 @@ export const Settings = () => {
     oldPassword: "",
     newPassword: "",
   });
+  const token = localStorage.getItem("token")
+
   const toggleOldPasswordVisibility = () => {
     setShowOldPassword(!showOldPassword);
   };
@@ -49,6 +51,8 @@ export const Settings = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+
           },
           body: JSON.stringify(settingData),
         }

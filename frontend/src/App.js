@@ -7,7 +7,7 @@ import { Dashboard }from "./pages/Dashboard/Dashboard"
 import { Analytics } from "./pages/Analytics/Analytics";
 import { Settings }from "./pages/Settings/Settings";
 import { PageNotFound } from "./pages/PageNoteFound/PageNotFound";
-
+import { ReadOnlyPage } from "./pages/ReadOnlyPage/ReadOnlyPage"
 const App = () => {
   return (
     <>
@@ -21,6 +21,8 @@ const App = () => {
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<PageNotFound />} />
           {/* <Route path="/logout" element={<PageNotFound />} /> */}
+          <Route path="/readonly" element={<ReadOnlyPage />} /> {/* Add this line */}
+
         </Routes>
       </BrowserRouter>
     </>

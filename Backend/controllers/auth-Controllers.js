@@ -100,6 +100,7 @@ const register = async (req, res) => {
 
   const updateSettings = async (req, res) => {
     try {
+      
       const { email, oldPassword, newPassword, newName } = req.body;
   console.log("user data ",req.body)
       // Validate old password and retrieve user

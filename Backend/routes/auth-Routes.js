@@ -19,7 +19,7 @@ router.route("/update").put(authController.updateSettings);
 router.route("/login").post(authController.login);
 
 router.route("/user").get(authMiddleware, authController.user);
-router.route('/update-password').post(authController.updateSettings);
+router.route('/update-password').post(authMiddleware, authController.updateSettings);
 
 
   module.exports = router;
