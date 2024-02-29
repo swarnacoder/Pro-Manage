@@ -18,12 +18,53 @@ exports.createTodo = async (req, res, next) => {
 };
 
 //GET ALL TODO CARD
+// exports.getAllTodos = async (req, res, next) => {
+//   try {
+// const userId = req.user.id    
+
+// const todos = await Todo.find({ user: userId });
+// res.status(200).json({
+//       success: true,
+//       todos,
+//       todoCount: todos.length,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching todos:", error);
+//     res.status(500).json({ success: false, message: "Internal Server Error" });
+//   }
+// };
+
+
 exports.getAllTodos = async (req, res, next) => {
   try {
-const userId = req.user.id    
+    const userId = req.user.id;
+    let filter = { user: userId };
 
-const todos = await Todo.find({ user: userId });
-res.status(200).json({
+    // Check for the time range query parameter
+    const { time } = req.query;
+    if (time) {
+      const currentDate = new Date();
+
+      // Set the date based on the selected time range
+      switch (time.toLowerCase()) {
+        case "today":
+          currentDate.setDate(currentDate.getDate() - 1); // Filtering for today
+          break;
+        case "week":
+          currentDate.setDate(currentDate.getDate() - 7); // Filtering for the last 7 days
+          break;
+        case "month":
+          currentDate.setDate(currentDate.getDate() - 30); // Filtering for the last 30 days
+          break;
+        default:
+          break;
+      }
+
+      filter.createdDate = { $gte: currentDate };
+    }
+
+    const todos = await Todo.find(filter);
+    res.status(200).json({
       success: true,
       todos,
       todoCount: todos.length,
@@ -33,6 +74,14 @@ res.status(200).json({
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
+
+
+
+
+
+
+
 //Get Single card Details 
 exports.getTodoDetails = async (req, res, next) => {
   const todo = await Todo.findById(req.params.id);

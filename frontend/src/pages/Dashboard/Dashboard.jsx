@@ -10,30 +10,72 @@ export const Dashboard = () => {
 
   const [todos, setTodos] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("token");
 
-        const response = await fetch("http://localhost:5000/api/v1/todos", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  // PREVIOUSLY WORKING CODE 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const token = localStorage.getItem("token");
 
-        if (response.ok) {
-          const data = await response.json();
-          setTodos(data.todos);
-        } else {
-          console.error("Error fetching todos:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error fetching todos:", error);
+  //       const response = await fetch("http://localhost:5000/api/v1/todos", {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       if (response.ok) {
+  //         const data = await response.json();
+  //         setTodos(data.todos);
+  //       } else {
+  //         console.error("Error fetching todos:", response.statusText);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching todos:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []); // Run only once when the component mounts
+
+// FOR TODO FILTER WITH CREATED DATE
+// Assuming you have a state for the selected time range
+const [selectedTime, setSelectedTime] = useState("week");
+
+// Handle dropdown change to set the selected time range
+const handleTimeChange = (event) => {
+  const newSelectedTime = event.target.value;
+  setSelectedTime(newSelectedTime);
+};
+
+// Use useEffect to fetch data when the component mounts or when selectedTime changes
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:5000/api/v1/todos?time=${selectedTime}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setTodos(data.todos);
+      } else {
+        console.error("Error fetching todos:", response.statusText);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching todos:", error);
+    }
+  };
 
-    fetchData();
-  }, []); // Run only once when the component mounts
+  fetchData(); // Call fetchData when the component mounts or when selectedTime changes
+}, [selectedTime]);
+
+
+
+
+
 
   // const [allTasks, setAllTasks] = useState([]);
 
@@ -179,10 +221,10 @@ export const Dashboard = () => {
             <p className={styles.header}> Board </p>
             {/* drop down  */}
             <div className={styles.dropdown}>
-              <select id="time" name="time">
+              <select id="time" name="time" onChange={handleTimeChange} value={selectedTime} >
+                <option value="Month">This Month</option>
                 <option value="Today">Today</option>
                 <option value="Week">This Week</option>
-                <option value="Month">This Month</option>
               </select>
             </div>
           </div>
