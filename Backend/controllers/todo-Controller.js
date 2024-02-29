@@ -34,7 +34,7 @@ exports.createTodo = async (req, res, next) => {
 //   }
 // };
 
-
+// WORKING CODE TILL DATE FILTER 
 exports.getAllTodos = async (req, res, next) => {
   try {
     const userId = req.user.id;
@@ -63,18 +63,32 @@ exports.getAllTodos = async (req, res, next) => {
       filter.createdDate = { $gte: currentDate };
     }
 
+  
+    
+
     const todos = await Todo.find(filter);
+      // ADDING ANALYTICS LOGIC 
+      const analyticsData = {
+        backlogTasks: todos.filter((todo) => todo.targetArea === 'Backlog').length,
+        todoTasks: todos.filter((todo) => todo.targetArea === 'ToDo').length,
+        inProgressTasks: todos.filter((todo) => todo.targetArea === 'In Progress').length,
+        doneTasks: todos.filter((todo) => todo.targetArea === 'Done').length,
+        lowPriorityTasks: todos.filter((todo) => todo.priority === 'Low').length,
+        moderatePriorityTasks: todos.filter((todo) => todo.priority === 'Moderate').length,
+        highPriorityTasks: todos.filter((todo) => todo.priority === 'High').length,
+        dueDateTasks: todos.filter((todo) => todo.dueDate >= new Date()).length,
+      };
     res.status(200).json({
       success: true,
       todos,
       todoCount: todos.length,
+      analyticsData,
     });
   } catch (error) {
     console.error("Error fetching todos:", error);
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
-
 
 
 

@@ -127,12 +127,14 @@ const Card = ({ todo, onCardMove }) => {
               )}
             </div>
             <div className={styles.card_categories}>
-              <p className={styles.duedate}>
-                {new Date(todo.dueDate).toLocaleDateString()}{" "}
-              </p>
+              {todo.dueDate && (
+                <p className={styles.duedate}>
+                  {new Date(todo.dueDate).toLocaleDateString()}
+                </p>
+              )}
 
-
-{/* WORKING CODE  */}
+              {/* WORKING CODE  */}
+              
               <div className={styles.card_change_categories}>
                 {todo.targetArea === "ToDo" && (
                   <>

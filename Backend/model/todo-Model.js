@@ -19,15 +19,14 @@ const todoSchema = new mongoose.Schema({
             minLength: [3, "Your Task must not be less than 3 Characters"],
         }
     }],
-
     dueDate: {
         type: Date,
-        default: new Date(), // Sets today's date as default
+        default: null, // Set default value to null
         validate: {
           validator: function (date) {
             // Check if the dueDate is at least one day more than the current date
-            return date >= new Date(new Date().setDate(new Date().getDate() + 1));
-          },
+            return date === null || date >= new Date();
+        },
           message: 'Due date must be at least one day more than the current date.',
         },
       },
