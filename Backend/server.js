@@ -7,13 +7,13 @@ const todoRouter = require("./routes/todo-Routes");
 const connectDb = require("./utils/database");
 const errorMiddleware = require("./middlewares/error-Middleware");
 
-const corsOptions = {
-  origin: "http://localhost:3000",
-  methods: "POST, GET, PUT, PATCH, DELETE, HEAD",
-  credentials: true,
-};
+// const corsOptions = {
+//   origin: "http://localhost:3000",
+//   methods: "POST, GET, PUT, PATCH, DELETE, HEAD",
+//   credentials: true,
+// };
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", userRouter);
