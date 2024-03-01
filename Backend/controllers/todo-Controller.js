@@ -146,6 +146,7 @@ exports.deleteTodo = async (req, res, next) => {
   }
 };
 
+// TO MOVE CARDS BETWEEN CATEGORY 
 exports.changeCategory  = async (req, res, next) => {
   try {
     let todo = await Todo.findById(req.params.id);
@@ -180,5 +181,6 @@ exports.changeCategory  = async (req, res, next) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
+
 
 

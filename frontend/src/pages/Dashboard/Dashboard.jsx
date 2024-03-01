@@ -10,6 +10,28 @@ export const Dashboard = () => {
 
   const [todos, setTodos] = useState([]);
 
+  const deleteCard = async (cardId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`http://localhost:5000/api/v1/todo/${cardId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        // Filter out the deleted card from the todos state
+        const updatedTodos = todos.filter((todo) => todo._id !== cardId);
+        setTodos(updatedTodos);
+      } else {
+        console.error("Error deleting card:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting card:", error);
+    }
+  };
+
 
   // PREVIOUSLY WORKING CODE 
   // useEffect(() => {
@@ -328,7 +350,10 @@ useEffect(() => {
                           todo={todo}
                           onCardMove={(newTargetArea) =>
                             handleCardMove(todo._id, newTargetArea)
+                            
                           }
+                          onDelete={() => deleteCard(todo._id)} // Pass the deleteCard function as a prop to the Card component
+
                         />
                       ))}
                   </div>

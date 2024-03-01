@@ -96,36 +96,46 @@ const register = async (req, res) => {
       console.log(` error from user route ${error}`);
     }
   };
+  
+   //UPDATE PASSWORD 
 
+const updateSettings = async (req, res) => {
+  try {
+    const userData = req.user;
 
-  const updateSettings = async (req, res) => {
-    try {
-      
-      const { email, oldPassword, newPassword, newName } = req.body;
-  console.log("user data ",req.body)
-      // Validate old password and retrieve user
-      const user = await User.findOne({ email });
-      if (!user || !(await bcrypt.compare(oldPassword, user.password))) {
-        return res.status(401).json({ error: "Incorrect old password or user not found" });
-      }
-  
-      // Update name 
-      if (newName) {
-        user.name = newName;
-      }
-  
-      // Update password
-      user.password = await bcrypt.hash(newPassword, 10);
-      await user.save();
-  
-      res.status(200).json({ success: true, msg: "Settings updated successfully" });
-    } catch (error) {
+    // const { userId } = req.user;
+    const { name, oldPassword, newPassword } = req.body;
+
+    const user = await User.findById( userData._id );
+    console.log("userData._id:", userData._id)
+    if (!user) {
+      return res.status(401).json({ error: "User not found" });
+    }
+    if (oldPassword && newPassword) {
+        const passCompare = await bcrypt.compare(oldPassword, user.password);
+
+        if (!passCompare) {
+            return res.status(401).json({
+                error: "Incorrect old password",
+            });
+        }
+        user.password = await bcrypt.hash(newPassword, 10);
+    }
+
+    if (name) {
+        user.name = name;
+    }
+
+    await user.save();
+
+    res.status(200).json({
+        message: "User details updated successfully",
+        User_Name: user.name,
+    });
+} catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal Server Error" });
     }
-  };
-  
-  
-
+};
 
 module.exports = { home, register, login, user, updateSettings };

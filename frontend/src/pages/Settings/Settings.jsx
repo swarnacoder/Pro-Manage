@@ -12,8 +12,7 @@ export const Settings = () => {
     oldPassword: "",
     newPassword: "",
   });
-  const token = localStorage.getItem("token")
-
+  
   const toggleOldPasswordVisibility = () => {
     setShowOldPassword(!showOldPassword);
   };
@@ -21,10 +20,10 @@ export const Settings = () => {
     setShowNewPassword(!showNewPassword);
   };
   const { user } = useAuth();
-
+  
   // const [userData, setUserData] = useState(true);
-
-
+  
+  
   useEffect(() => {
     // Set initial name value from user context
     if (user) {
@@ -34,25 +33,25 @@ export const Settings = () => {
       }));
     }
   }, [user]);
-
+  
   const handleInput = (e) => {
     let name = e.target.name;
     let value = e.target.value;
     setSettingData((prev) => ({ ...prev, [name]: value }));
-
+    
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     try {
+      const token = localStorage.getItem("token")
       const response = await fetch(
         "http://localhost:5000/api/auth/update-password",
         {
-          method: "POST",
+          method: "put",
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
-
           },
           body: JSON.stringify(settingData),
         }
@@ -62,7 +61,7 @@ export const Settings = () => {
 
       if (response.ok) {
         console.log(response)
-        alert(data.msg); // Show success message
+        alert("User Details updated successfully "); // Show success message
       } else {
         alert(data.error); // Show error message
       }

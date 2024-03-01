@@ -47,7 +47,10 @@ const todoSchema = new mongoose.Schema({
         enum: ["Backlog", "ToDo", "In Progress", "Done"],
         default: "ToDo",
       },
-
+      sharedLink: {
+        type: String,
+        default: null, // Set default value to null
+      },
 
 //     isTodo: {
 //     type : String ,

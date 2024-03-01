@@ -5,14 +5,20 @@ import styles from "./Card.module.css";
 import arrowUp from "../../assets/icons/arrow_up.png";
 import arrowDown from "../../assets/icons/arrow_down.png";
 
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const Card = ({ todo, onCardMove }) => {
+
+
+const Card = ({ todo, onCardMove, onDelete }) => {
   const [expand, setExpand] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
+  const [modal, setModal] = useState(false);
 
+  const toggleModal = () => {
+    setModal(!modal);
+  };
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
@@ -22,45 +28,6 @@ const Card = ({ todo, onCardMove }) => {
     onCardMove(newTargetArea);
   };
 
-  const handleShareIconClick = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch(
-        `http://localhost:5000/api/v1/todo/${todo._id}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        const todoLink = `http://localhost:5000/api/v1/todo/${todo._id}`;
-        navigator.clipboard
-          .writeText(todoLink)
-          .then(() => {
-            toast.success("Link copied to Clipboard", {
-              position: "top-right",
-              autoClose: 1400,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            });
-          })
-          .catch((error) => {
-            console.error("Error copying todo link to clipboard:", error);
-          });
-      } else {
-        console.error("Error fetching todo:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error sharing todo:", error);
-    }
-  };
 
   return (
     <>
@@ -82,16 +49,39 @@ const Card = ({ todo, onCardMove }) => {
                   </button>
                   <button
                     className={styles.dropdownItemBtn}
-                    onClick={handleShareIconClick}
                   >
                     Share
                   </button>
                   <button
                     className={styles.dropdownItemBtn}
-                    // onClick={onDelete}
+                    onClick={toggleModal}
                   >
                     Delete
                   </button>
+                  {modal && (
+              <div className={styles.modal}>
+                <div onClick={toggleModal} className={styles.overlay}></div>
+                <div className={styles.modal_container}>
+                  <p className={styles.modal_text}>
+                    Are you sure you want to Delete?
+                  </p>
+                  <div className={styles.modal_buttons}>
+                    <button
+                    onClick={onDelete}
+                    className={styles.modal_logout}
+                    >
+                        Yes, Delete
+                    </button>
+                    <button
+                      className={styles.modal_cancel}
+                      onClick={toggleModal}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
                 </div>
               )}
             </div>
