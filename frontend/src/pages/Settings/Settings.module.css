@@ -3,12 +3,12 @@
     height: 100vh;
     display: flex;
     gap: 0;
-   /* background-color: yellow; */
+  
    }
 
 
 .setting_container{
-    /* background-color: aqua; */
+   
     display: flex;
     flex-direction: column;
     gap: 1rem;

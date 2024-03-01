@@ -1,14 +1,8 @@
 import React, { useState } from "react";
 import styles from "./Card.module.css";
 
-// import more from "../../assets/icons/more.png";
-// import arrowUp from "../../assets/icons/arrow_up.png";
-// import arrowDown from "../../assets/icons/arrow_down.png";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import CopyToClipboard from "react-copy-to-clipboard";
-// import ReadOnlyPage from "../../pages/ReadOnlyPage/ReadOnlyPage";
 
 const Card = ({ todo, onCardMove, onDelete }) => {
   const [expand, setExpand] = useState(false);
@@ -24,11 +18,9 @@ const Card = ({ todo, onCardMove, onDelete }) => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
   };
 
-  // category move WORKING CODE
   const handleMoveButtonClick = (newTargetArea) => {
     onCardMove(newTargetArea);
   };
-
 
   // share task
   const anonymousLink = `/${todo._id}/readOnly`;
@@ -44,85 +36,80 @@ const Card = ({ todo, onCardMove, onDelete }) => {
     }
   };
 
-
-  
-  // LOGIC FOR DUE DATE BACKGROUND COLOR 
+  // LOGIC FOR DUE DATE BACKGROUND COLOR
   const isDueDatePassed = new Date(todo.dueDate) === new Date();
   const dueDateClass = isDueDatePassed ? styles.dueDateRed : styles.dueDateGrey;
-  
+
   return (
     <>
-      <section className={`${styles.card_container} ${expand && styles.expanded}`}>
+      <section
+        className={`${styles.card_container} ${expand && styles.expanded}`}
+      >
         {todo && (
           <>
             <div className={styles.card_header}>
               <p className={styles.priority}> {todo.priority} </p>
-              <div className={styles.more_Icon} onClick={handleToggle} >
-              <button className={styles.dropdownButton} >
-                <i className="fa-solid fa-ellipsis"></i>
-              </button>
-              {isOpen && (
-                <div className={styles.dropdownContent}>
-                  <div className={styles.modal_content}>
-                    
-                  <button
-                    className={styles.dropdownItemBtn}
-                    // onClick={onEdit}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className={styles.dropdownItemBtn}
-                    onClick={shareTask}
-                  >
-                    Share
-                  </button>
-                  <button
-                    className={styles.dropdownItemBtn}
-                    onClick={toggleModal}
-                  >
-                    Delete
-                  </button>
-                  {modal && (
-                    <div className={styles.modal}>
-                      <div
+              <div className={styles.more_Icon} onClick={handleToggle}>
+                <button className={styles.dropdownButton}>
+                  <i className="fa-solid fa-ellipsis"></i>
+                </button>
+                {isOpen && (
+                  <div className={styles.dropdownContent}>
+                    <div className={styles.modal_content}>
+                      <button
+                        className={styles.dropdownItemBtn}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className={styles.dropdownItemBtn}
+                        onClick={shareTask}
+                      >
+                        Share
+                      </button>
+                      <button
+                        className={styles.dropdownItemBtn}
                         onClick={toggleModal}
-                        className={styles.overlay}
-                      ></div>
-                      <div className={styles.modal_container}>
-                        <p className={styles.modal_text}>
-                          Are you sure you want to Delete?
-                        </p>
-                        <div className={styles.modal_buttons}>
-                          <button
-                            onClick={onDelete}
-                            className={styles.modal_logout}
-                          >
-                            Yes, Delete
-                          </button>
-                          <button
-                            className={styles.modal_cancel}
+                      >
+                        Delete
+                      </button>
+                      {modal && (
+                        <div className={styles.modal}>
+                          <div
                             onClick={toggleModal}
-                          >
-                            Cancel
-                          </button>
+                            className={styles.overlay}
+                          ></div>
+                          <div className={styles.modal_container}>
+                            <p className={styles.modal_text}>
+                              Are you sure you want to Delete?
+                            </p>
+                            <div className={styles.modal_buttons}>
+                              <button
+                                onClick={onDelete}
+                                className={styles.modal_logout}
+                              >
+                                Yes, Delete
+                              </button>
+                              <button
+                                className={styles.modal_cancel}
+                                onClick={toggleModal}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
-                  )}
-                   </div>
-                </div>
-
-                
-              )}
-              
-</div>
+                  </div>
+                )}
+              </div>
             </div>
             <div>
               <p className={styles.title}>{todo.title}</p>
             </div>
 
-            {/* ######################################################## */}
+          
             <div className={styles.card_checklist}>
               <h4>
                 Checklist(
@@ -136,12 +123,13 @@ const Card = ({ todo, onCardMove, onDelete }) => {
               >
                 {expand ? (
                   <div className="arrowUp">
-                    <i className="fa-solid fa-chevron-down fa-flip-vertical"
-                    style={{
-                      color: "#767575",
-                      backgroundColor: "#EEECEC",
-                      placeItems: "center",
-                    }}
+                    <i
+                      className="fa-solid fa-chevron-down fa-flip-vertical"
+                      style={{
+                        color: "#767575",
+                        backgroundColor: "#EEECEC",
+                        placeItems: "center",
+                      }}
                     ></i>
                   </div>
                 ) : (
@@ -157,40 +145,45 @@ const Card = ({ todo, onCardMove, onDelete }) => {
                   </div>
                 )}
               </div>
+            </div>
+            {expand && (
+              <div
+                className={`${styles.expand_area_content} ${
+                  expand && styles.expanded_content
+                }`}
+              >
+                {todo.checklist.map((cardItem) => (
+                  <div key={cardItem._id} className={styles.expandArea}>
+                    <input
+                      className={styles.checkboxArea}
+                      type="checkbox"
+                      checked={cardItem.completed}
+                      readOnly
+                    />
+                    <p
+                      className={styles.inputArea}
+                      style={{ marginLeft: "10px" }}
+                    >
+                      {cardItem.text}
+                    </p>
+                  </div>
+                ))}
               </div>
-              {/* ************************************************** */}
-              {expand && (
-                <div className={`${styles.expand_area_content} ${expand && styles.expanded_content}`}>
-                  {todo.checklist.map((cardItem) => (
-                    <div key={cardItem._id} className={styles.expandArea}>
-                      <input
-                        className={styles.checkboxArea}
-                        type="checkbox"
-                        checked={cardItem.completed}
-                        readOnly
-                      />
-                      <p
-                        className={styles.inputArea}
-                        style={{ marginLeft: "10px" }}
-                      >
-                        {cardItem.text}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
+            )}
 
-              {/* **************************************************************** */}
-           
-            {/* ####################################################################### */}
-            <div className={`${styles.card_categories} ${expand && styles.expanded_card_categories}`}>
+            
+            <div
+              className={`${styles.card_categories} ${
+                expand && styles.expanded_card_categories
+              }`}
+            >
               {todo.dueDate && (
-             <p className={`${styles.duedate} ${dueDateClass}`}>
-             {new Date(todo.dueDate).toLocaleDateString()}
-           </p>
+                <p className={`${styles.duedate} ${dueDateClass}`}>
+                  {new Date(todo.dueDate).toLocaleDateString()}
+                </p>
               )}
 
-              {/* WORKING CODE  */}
+             
 
               <div className={styles.card_change_categories}>
                 {todo.targetArea === "ToDo" && (
@@ -288,7 +281,7 @@ const Card = ({ todo, onCardMove, onDelete }) => {
       </section>
       {copied && (
         <div style={{ display: "none" }}>
-          {/* Hidden div to prevent unwanted text selection */}
+        
           <input
             id="readOnlyLink"
             defaultValue={window.location.origin + anonymousLink}

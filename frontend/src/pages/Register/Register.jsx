@@ -81,8 +81,7 @@ const handleSubmit = async (e) => {
     setValidationErrors(errors);
 
     if (Object.keys(errors).length === 0) {
-      // alert(user);
-      // console.log(user);
+     
       try {
         const response = await fetch(
           `http://localhost:5000/api/auth/register`,
@@ -102,9 +101,7 @@ const handleSubmit = async (e) => {
           setUser({ name: "", email: "", confirmPassword: "", password: "" });
 
           navigate("/login");
-          // toast.success("Login successful!", {
-          //   position: toast.POSITION.TOP_RIGHT,
-          // });
+          
         }
         console.log(response);
       } catch (error) {

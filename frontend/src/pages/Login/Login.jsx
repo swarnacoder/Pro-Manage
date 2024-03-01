@@ -32,8 +32,7 @@ export const Login = () => {
   //Handling the form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // alert(user);
-    // console.log(user);
+    
     try {
       const response = await fetch(`http://localhost:5000/api/auth/login`, {
         method: "POST",
@@ -50,15 +49,12 @@ export const Login = () => {
         setUser({ email: "", password: "" });
 
         navigate("/dashboard");
-        // toast.success("Login successful!", {
-        //   position: toast.POSITION.TOP_RIGHT,
-        // });
+        
       }
 
       else {
         alert("INVALID CREDENTIALS")
       }
-      // console.log(response);
     } catch (error) {
       console.log("Login: ", error);
     
@@ -111,7 +107,7 @@ export const Login = () => {
               <input
                 placeholder="Password"
                 className={styles.login_form_input}
-                type={showPassword ? "text" : "password"} // Toggle type
+                type={showPassword ? "text" : "password"} 
                 name="password"
                 id="password"
                 required
@@ -122,13 +118,13 @@ export const Login = () => {
               <i
                 className={`fa-regular fa-eye eye-icon ${
                   showPassword ? "visible" : ""
-                }`} // Toggle visibility class
+                }`}
                 onClick={togglePasswordVisibility}
               ></i>
             </label>
             <button className={styles.login_btn}>
             Log in
-              {/* <NavLink className={styles.login_btn_navlink} to="/dashboard">Log in</NavLink> */}
+             
             </button>
           </form>
           <div className={styles.login_buttom}>

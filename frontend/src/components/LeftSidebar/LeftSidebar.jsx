@@ -24,7 +24,7 @@ export const LeftSidebar = () => {
 
   const handleLogout = () => {
     LogoutUser();
-    toggleModal(); // Close the modal after logout
+    toggleModal(); 
   };
 
   return (

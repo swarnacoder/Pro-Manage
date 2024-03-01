@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { LeftSidebar } from "../../components/LeftSidebar/LeftSidebar"
 import styles from "./Analytics.module.css"
 import dotIcon from "../../assets/icons/doticon.png"
+import { MoonLoader } from "react-spinners";
 
 
 
@@ -11,7 +12,6 @@ export const Analytics = () => {
     const [analyticsData, setAnalyticsData] = useState({});
 
     useEffect(() => {
-        // Fetch analytics data from the backend
         const fetchAnalyticsData = async () => {
           try {
             const token = localStorage.getItem("token");
@@ -35,6 +35,21 @@ export const Analytics = () => {
     
         fetchAnalyticsData();
       }, []);
+
+      const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className={styles.loaderContainer}>
+        <MoonLoader color="#474444" />
+      </div>
+    );
+  }
 
     return (
         <>

@@ -30,21 +30,15 @@ const todoSchema = new mongoose.Schema({
   ],
   dueDate: {
     type: Date,
-    default: null, // Set default value to null
+    default: null,
     validate: {
       validator: function (date) {
-        // Check if the dueDate is at least one day more than the current date
         return date === null || date >= new Date();
       },
       message: "Due date must be at least one day more than the current date.",
     },
   },
-  // category: {
-  //     type: String,
-  //     // required: [true, "Please select one Category to proceed"],
-  //     enum: ['ToDo', 'BackLog', 'Done', 'InProgress'],
-  //     default: 'ToDo',
-  // },
+
   user: {
     type: mongoose.Schema.ObjectId,
     ref: "User",
@@ -65,23 +59,6 @@ const todoSchema = new mongoose.Schema({
     default: mongoose.Types.ObjectId,
     unique: true,
   },
-
-  //     isTodo: {
-  //     type : String ,
-  //    default: true,
-  // },
-  //     isProgress: {
-  //     type : String ,
-  //    default: false,
-  // },
-  //     isBcaklog: {
-  //     type : String ,
-  //    default: false,
-  // },
-  //     isDone: {
-  //     type : String ,
-  //    default: false,
-  // },
 
   createdDate: {
     type: Date,

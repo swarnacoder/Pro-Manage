@@ -21,8 +21,6 @@ export const Settings = () => {
   };
   const { user } = useAuth();
   
-  // const [userData, setUserData] = useState(true);
-  
   
   useEffect(() => {
     // Set initial name value from user context
@@ -61,9 +59,9 @@ export const Settings = () => {
 
       if (response.ok) {
         console.log(response)
-        alert("User Details updated successfully "); // Show success message
+        alert("User Details updated successfully "); 
       } else {
-        alert(data.error); // Show error message
+        alert(data.error); 
       }
     } catch (error) {
       console.error("Error updating password:", error);

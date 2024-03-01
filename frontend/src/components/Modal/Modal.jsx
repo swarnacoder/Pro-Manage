@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styles from "./Modal.module.css";
-// import { useAuth } from "../../Context/auth";
 import { toast, ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -8,20 +7,14 @@ import "react-toastify/dist/ReactToastify.css";
 const Modal = ({ onClose }) => {
   const [formData, setFormData] = useState({
     title: "",
-    selectedPriority: "High", 
+    selectedPriority: "High",
     dueDate: "",
-    // checklistItems: [{ text: "", completed: false }],
+
     checklistItems: [],
   });
   const [showChecklistItems, setShowChecklistItems] = useState(false);
 
-  // const { user, storeTokenInLS } = useAuth();
   const token = localStorage.getItem("token");
-
-  // const [selectedPriority, setSelectedPriority] = useState();
-  // const [checklistItems, setChecklistItems] = useState([
-  //   { text: "", completed: false }, // Initial checklist item
-  // ]);
 
   const handleChecklistChange = (index, event) => {
     const updatedChecklist = formData.checklistItems.map((item, i) =>
@@ -55,7 +48,7 @@ const Modal = ({ onClose }) => {
   };
   const handleChange = (event) => {
     const { name, value } = event.target;
-    // console.log("Field Name:", name, "Value:", value);
+
     setFormData({ ...formData, [name]: value });
   };
 
@@ -96,7 +89,7 @@ const Modal = ({ onClose }) => {
     // Create checklist array
     const checklist = checklistItems.map((item) => ({
       text: item.text,
-      completed: item.completed || false, // Make sure to include both checked and unchecked tasks
+      completed: item.completed || false,
     }));
     try {
       const response = await fetch("http://localhost:5000/api/v1/todo/new", {
@@ -121,25 +114,23 @@ const Modal = ({ onClose }) => {
       console.error("Error creating todo:", error);
     }
 
-// ERROR HANDELLING 
-if (!title.trim()) {
-  toast.error("Please enter the title.");
-  return;
-}
+    // ERROR HANDELLING
+    if (!title.trim()) {
+      toast.error("Please enter the title.");
+      return;
+    }
 
-// Check if a priority is selected
-if (!selectedPriority) {
-  toast.error("Please select a priority.");
-  return;
-}
+    // Check if a priority is selected
+    if (!selectedPriority) {
+      toast.error("Please select a priority.");
+      return;
+    }
 
-// Check if checklist is empty
-if (checklistItems.length === 0) {
-  toast.error("Please add a checklist.");
-  return;
-}
-
-
+    // Check if checklist is empty
+    if (checklistItems.length === 0) {
+      toast.error("Please add a checklist.");
+      return;
+    }
   };
 
   return (
@@ -150,7 +141,7 @@ if (checklistItems.length === 0) {
           <form onSubmit={handleSubmit} className={styles.modal_form}>
             <div className={styles.title_head}>
               <label className={styles.priority_text} htmlFor="">
-                Title <span style={{color: "red"}}>*</span>
+                Title <span style={{ color: "red" }}>*</span>
               </label>
               <input
                 className={styles.title}
@@ -164,7 +155,9 @@ if (checklistItems.length === 0) {
             </div>
 
             <div className={styles.priorityContainer}>
-              <label className={styles.priority_text}>Select Priority <span style={{color: "red"}}>*</span> </label>
+              <label className={styles.priority_text}>
+                Select Priority <span style={{ color: "red" }}>*</span>{" "}
+              </label>
               {["High", "Moderate", "Low"].map((priority) => (
                 <button
                   key={priority}
@@ -202,7 +195,7 @@ if (checklistItems.length === 0) {
             <div className={styles.checklist}>
               <p>
                 Checklist ({checkedCount} / {formData.checklistItems.length})
-                <span style={{color: "red"}}> *</span>
+                <span style={{ color: "red" }}> *</span>
               </p>
               {showChecklistItems && (
                 <div className={styles.checklist_section}>

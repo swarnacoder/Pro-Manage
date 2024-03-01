@@ -1,10 +1,9 @@
 const Todo = require("../model/todo-Model");
 
-
 //Create A TODO
 exports.createTodo = async (req, res, next) => {
   try {
-    req.body.user = req.user.id
+    req.body.user = req.user.id;
     const todo = new Todo(req.body);
     await todo.save();
     res.status(201).json({
@@ -17,24 +16,6 @@ exports.createTodo = async (req, res, next) => {
   }
 };
 
-//GET ALL TODO CARD
-// exports.getAllTodos = async (req, res, next) => {
-//   try {
-// const userId = req.user.id    
-
-// const todos = await Todo.find({ user: userId });
-// res.status(200).json({
-//       success: true,
-//       todos,
-//       todoCount: todos.length,
-//     });
-//   } catch (error) {
-//     console.error("Error fetching todos:", error);
-//     res.status(500).json({ success: false, message: "Internal Server Error" });
-//   }
-// };
-
-// WORKING CODE TILL DATE FILTER 
 exports.getAllTodos = async (req, res, next) => {
   try {
     const userId = req.user.id;
@@ -63,21 +44,23 @@ exports.getAllTodos = async (req, res, next) => {
       filter.createdDate = { $gte: currentDate };
     }
 
-  
-    
-
     const todos = await Todo.find(filter);
-      // ADDING ANALYTICS LOGIC 
-      const analyticsData = {
-        backlogTasks: todos.filter((todo) => todo.targetArea === 'Backlog').length,
-        todoTasks: todos.filter((todo) => todo.targetArea === 'ToDo').length,
-        inProgressTasks: todos.filter((todo) => todo.targetArea === 'In Progress').length,
-        doneTasks: todos.filter((todo) => todo.targetArea === 'Done').length,
-        lowPriorityTasks: todos.filter((todo) => todo.priority === 'Low').length,
-        moderatePriorityTasks: todos.filter((todo) => todo.priority === 'Moderate').length,
-        highPriorityTasks: todos.filter((todo) => todo.priority === 'High').length,
-        dueDateTasks: todos.filter((todo) => todo.dueDate >= new Date()).length,
-      };
+    // ADDING ANALYTICS LOGIC
+    const analyticsData = {
+      backlogTasks: todos.filter((todo) => todo.targetArea === "Backlog")
+        .length,
+      todoTasks: todos.filter((todo) => todo.targetArea === "ToDo").length,
+      inProgressTasks: todos.filter((todo) => todo.targetArea === "In Progress")
+        .length,
+      doneTasks: todos.filter((todo) => todo.targetArea === "Done").length,
+      lowPriorityTasks: todos.filter((todo) => todo.priority === "Low").length,
+      moderatePriorityTasks: todos.filter(
+        (todo) => todo.priority === "Moderate"
+      ).length,
+      highPriorityTasks: todos.filter((todo) => todo.priority === "High")
+        .length,
+      dueDateTasks: todos.filter((todo) => todo.dueDate >= new Date()).length,
+    };
     res.status(200).json({
       success: true,
       todos,
@@ -90,13 +73,7 @@ exports.getAllTodos = async (req, res, next) => {
   }
 };
 
-
-
-
-
-
-
-//Get Single card Details 
+//Get Single card Details
 exports.getTodoDetails = async (req, res, next) => {
   const todo = await Todo.findById(req.params.id);
   if (!todo) {
@@ -108,7 +85,7 @@ exports.getTodoDetails = async (req, res, next) => {
   });
 };
 
-//Update  Edit Todo 
+//Update  Edit Todo
 exports.updateTodo = async (req, res, next) => {
   const { title, priority, checklist, dueDate } = req.body;
 
@@ -121,7 +98,7 @@ exports.updateTodo = async (req, res, next) => {
         checklist,
         dueDate,
       },
-      { new: true } 
+      { new: true }
     );
 
     res.json(updatedTodo);
@@ -130,7 +107,6 @@ exports.updateTodo = async (req, res, next) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
 
 //Delete Todo
 exports.deleteTodo = async (req, res, next) => {
@@ -153,8 +129,8 @@ exports.deleteTodo = async (req, res, next) => {
   }
 };
 
-// TO MOVE CARDS BETWEEN CATEGORY 
-exports.changeCategory  = async (req, res, next) => {
+// TO MOVE CARDS BETWEEN CATEGORY
+exports.changeCategory = async (req, res, next) => {
   try {
     let todo = await Todo.findById(req.params.id);
     if (!todo) {
@@ -172,11 +148,11 @@ exports.changeCategory  = async (req, res, next) => {
       );
     } else {
       // If targetArea is not provided, update other fields (title, priority, etc.)
-      todo = await Todo.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        { new: true, runValidators: true, useFindAndModify: false }
-      );
+      todo = await Todo.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false,
+      });
     }
 
     res.status(200).json({
@@ -188,6 +164,3 @@ exports.changeCategory  = async (req, res, next) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
-
-
-
