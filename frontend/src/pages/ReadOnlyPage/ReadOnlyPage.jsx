@@ -13,7 +13,7 @@ console.log(cardData._id)
     const fetchCardData = async () => {
       try {
         const token = localStorage.getItem("token")
-        const response = await fetch(`http://localhost:5000/api/v1/todo/${_id}`, {
+        const response = await fetch(`https://swarnapprava5426-gmail-com-cuvette-final-ea3b.onrender.com/api/v1/todo/${_id}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

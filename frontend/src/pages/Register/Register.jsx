@@ -84,7 +84,7 @@ const handleSubmit = async (e) => {
      
       try {
         const response = await fetch(
-          `http://localhost:5000/api/auth/register`,
+          `https://swarnapprava5426-gmail-com-cuvette-final-ea3b.onrender.com/api/auth/register`,
           {
             method: "POST",
             headers: {

@@ -16,7 +16,7 @@ export const Dashboard = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:5000/api/v1/todo/${cardId}`,
+        `https://swarnapprava5426-gmail-com-cuvette-final-ea3b.onrender.com/api/v1/todo/${cardId}`,
         {
           method: "DELETE",
           headers: {
@@ -50,7 +50,7 @@ export const Dashboard = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await fetch(
-          `http://localhost:5000/api/v1/todos?time=${selectedTime}`,
+          `https://swarnapprava5426-gmail-com-cuvette-final-ea3b.onrender.com/api/v1/todos?time=${selectedTime}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -112,7 +112,7 @@ export const Dashboard = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:5000/api/v1/todo/${cardId}`,
+        `https://swarnapprava5426-gmail-com-cuvette-final-ea3b.onrender.com/api/v1/todo/${cardId}`,
         {
           method: "PUT",
           headers: {

@@ -15,7 +15,7 @@ export const Analytics = () => {
         const fetchAnalyticsData = async () => {
           try {
             const token = localStorage.getItem("token");
-            const response = await fetch("http://localhost:5000/api/v1/todos", {
+            const response = await fetch("https://swarnapprava5426-gmail-com-cuvette-final-ea3b.onrender.com/api/v1/todos", {
               method: "GET",
               headers: {
                 Authorization: `Bearer ${token}`,

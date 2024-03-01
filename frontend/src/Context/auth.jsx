@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
   // Authentication & get USER DATA FOR SETTINGS
   const userAuthentication = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/auth/user", {
+      const response = await fetch("https://swarnapprava5426-gmail-com-cuvette-final-ea3b.onrender.com/api/auth/user", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
