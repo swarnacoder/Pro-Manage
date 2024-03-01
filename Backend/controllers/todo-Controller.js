@@ -110,20 +110,27 @@ exports.getTodoDetails = async (req, res, next) => {
 
 //Update  Edit Todo 
 exports.updateTodo = async (req, res, next) => {
-  let todo = await Todo.findById(req.params.id);
-  if (!todo) {
-    return res.status(404).json({ msg: "Todo Not Found" });
+  const { title, priority, checklist, dueDate } = req.body;
+
+  try {
+    const updatedTodo = await Todo.findByIdAndUpdate(
+      req.params.id,
+      {
+        title,
+        priority,
+        checklist,
+        dueDate,
+      },
+      { new: true } 
+    );
+
+    res.json(updatedTodo);
+  } catch (error) {
+    console.error("Error updating todo:", error);
+    res.status(500).send("Internal Server Error");
   }
-  todo = await Todo.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  });
-  res.status(200).json({
-    success: true,
-    todo,
-  });
 };
+
 
 //Delete Todo
 exports.deleteTodo = async (req, res, next) => {

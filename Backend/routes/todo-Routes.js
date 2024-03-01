@@ -11,8 +11,8 @@ router.route("/todo/new").post(authMiddleware, createTodo);
 router
   .route("/todo/:id")
   .get(authMiddleware, getTodoDetails)
-  .put(authMiddleware, updateTodo)
-  .put(authMiddleware, changeCategory) // Update route to accept PUT requests
+  .put(authMiddleware, updateTodo) // edit the todo 
+  .put(authMiddleware, changeCategory) 
 
   .delete(authMiddleware, deleteTodo);
 module.exports = router;

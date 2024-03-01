@@ -1,18 +1,22 @@
 import React, { useState } from "react";
 import styles from "./Modal.module.css";
-import doticon from "../../assets/icons/doticon.png";
 // import { useAuth } from "../../Context/auth";
+import { toast, ToastContainer } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
 
 const Modal = ({ onClose }) => {
   const [formData, setFormData] = useState({
     title: "",
-    selectedPriority: "High", // athi gote default priority selsect in modal
+    selectedPriority: "High", 
     dueDate: "",
-    checklistItems: [{ text: "", completed: false }],
+    // checklistItems: [{ text: "", completed: false }],
+    checklistItems: [],
   });
-  // const { user, storeTokenInLS } = useAuth();
-const token = localStorage.getItem("token")
+  const [showChecklistItems, setShowChecklistItems] = useState(false);
 
+  // const { user, storeTokenInLS } = useAuth();
+  const token = localStorage.getItem("token");
 
   // const [selectedPriority, setSelectedPriority] = useState();
   // const [checklistItems, setChecklistItems] = useState([
@@ -27,6 +31,8 @@ const token = localStorage.getItem("token")
   };
 
   const handleAddItem = () => {
+    setShowChecklistItems(true);
+
     setFormData({
       ...formData,
       checklistItems: [
@@ -34,6 +40,23 @@ const token = localStorage.getItem("token")
         { text: "", completed: false },
       ],
     });
+  };
+
+  const checkedCount = formData.checklistItems.reduce(
+    (count, item) => (item.completed ? count + 1 : count),
+    0
+  );
+
+  const handleDeleteItem = (index) => {
+    const updatedChecklist = formData.checklistItems.filter(
+      (item, i) => i !== index
+    );
+    setFormData({ ...formData, checklistItems: updatedChecklist });
+  };
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    // console.log("Field Name:", name, "Value:", value);
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (event) => {
@@ -46,7 +69,7 @@ const token = localStorage.getItem("token")
     const oneDayLater = new Date(
       currentDate.setDate(currentDate.getDate() + 1)
     );
-    if (selectedDate <= oneDayLater) {
+    if (selectedDate < oneDayLater) {
       console.error(
         "Due date must be at least one day more than the current date."
       );
@@ -71,8 +94,10 @@ const token = localStorage.getItem("token")
       return; // Stop form submission if priority is not selected
     }
     // Create checklist array
-    const checklist = checklistItems.map((item) => ({ text: item.text }));
-
+    const checklist = checklistItems.map((item) => ({
+      text: item.text,
+      completed: item.completed || false, // Make sure to include both checked and unchecked tasks
+    }));
     try {
       const response = await fetch("http://localhost:5000/api/v1/todo/new", {
         method: "POST",
@@ -82,11 +107,10 @@ const token = localStorage.getItem("token")
           checklist,
           dueDate,
         }),
-        headers: { "Content-Type": "application/json" ,
-        "Authorization": `Bearer ${token}`,
-
-      
-      },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (response.ok) {
         onClose();
@@ -96,12 +120,26 @@ const token = localStorage.getItem("token")
     } catch (error) {
       console.error("Error creating todo:", error);
     }
-  };
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    console.log("Field Name:", name, "Value:", value);
-    setFormData({ ...formData, [name]: value });
+// ERROR HANDELLING 
+if (!title.trim()) {
+  toast.error("Please enter the title.");
+  return;
+}
+
+// Check if a priority is selected
+if (!selectedPriority) {
+  toast.error("Please select a priority.");
+  return;
+}
+
+// Check if checklist is empty
+if (checklistItems.length === 0) {
+  toast.error("Please add a checklist.");
+  return;
+}
+
+
   };
 
   return (
@@ -112,7 +150,7 @@ const token = localStorage.getItem("token")
           <form onSubmit={handleSubmit} className={styles.modal_form}>
             <div className={styles.title_head}>
               <label className={styles.priority_text} htmlFor="">
-                Title
+                Title <span style={{color: "red"}}>*</span>
               </label>
               <input
                 className={styles.title}
@@ -126,7 +164,7 @@ const token = localStorage.getItem("token")
             </div>
 
             <div className={styles.priorityContainer}>
-              <label className={styles.priority_text}>Select Priority:</label>
+              <label className={styles.priority_text}>Select Priority <span style={{color: "red"}}>*</span> </label>
               {["High", "Moderate", "Low"].map((priority) => (
                 <button
                   key={priority}
@@ -138,7 +176,24 @@ const token = localStorage.getItem("token")
                     setFormData({ ...formData, selectedPriority: priority })
                   }
                 >
-                  <img src={doticon} alt="" />
+                  {priority === "High" && (
+                    <i
+                      className="fa-solid fa-circle fa-xs "
+                      style={{ color: "#FF2473" }}
+                    />
+                  )}
+                  {priority === "Moderate" && (
+                    <i
+                      className="fa-solid fa-circle fa-xs "
+                      style={{ color: "#18B0FF" }}
+                    />
+                  )}
+                  {priority === "Low" && (
+                    <i
+                      className="fa-solid fa-circle fa-xs "
+                      style={{ color: "#63C05B" }}
+                    />
+                  )}
                   {priority} Priority
                 </button>
               ))}
@@ -146,48 +201,56 @@ const token = localStorage.getItem("token")
 
             <div className={styles.checklist}>
               <p>
-                Checklist ({formData.checklistItems.length}/
-                {formData.checklistItems.length})
+                Checklist ({checkedCount} / {formData.checklistItems.length})
+                <span style={{color: "red"}}> *</span>
               </p>
-              <div className={styles.checklist_section}>
-                {formData.checklistItems.map((item, index) => (
-                  <div key={index} className={styles.checklistItem}>
-                    <label htmlFor="" className="checklist_input_label">
-                      <input
-                        className={styles.checklist_Input}
-                        type="checkbox"
-                        checked={item.completed}
-                        onChange={(e) => handleChecklistChange(index, e)}
-                      />
+              {showChecklistItems && (
+                <div className={styles.checklist_section}>
+                  {formData.checklistItems.map((item, index) => (
+                    <div key={index} className={styles.checklistItem}>
+                      <label htmlFor="" className="checklist_input_label">
+                        <input
+                          className={styles.checklist_Input}
+                          type="checkbox"
+                          checked={item.completed}
+                          onChange={(e) => handleChecklistChange(index, e)}
+                        />
 
-                      <input
-                        type="text"
-                        name={`checklist[${index}]`}
-                        value={item.text}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            checklistItems: formData.checklistItems.map(
-                              (prevItem, i) =>
-                                i === index
-                                  ? { ...prevItem, text: e.target.value }
-                                  : prevItem
-                            ),
-                          })
-                        }
-                        placeholder="Task To Be Done"
-                        className={styles.checklistItemInput}
-                      />
-                    </label>
-                    <i
-                      className="fa-solid fa-trash"
-                      style={{ color: "#da200b" }}
-                    ></i>
-                  </div>
-                ))}
-              </div>
+                        <input
+                          type="text"
+                          name={`checklist[${index}]`}
+                          value={item.text}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              checklistItems: formData.checklistItems.map(
+                                (prevItem, i) =>
+                                  i === index
+                                    ? { ...prevItem, text: e.target.value }
+                                    : prevItem
+                              ),
+                            })
+                          }
+                          placeholder="Task To Be Done"
+                          className={styles.checklistItemInput}
+                        />
+                      </label>
+
+                      <i
+                        className="fa-solid fa-trash"
+                        style={{ color: "#da200b" }}
+                        onClick={() => handleDeleteItem(index)}
+                      ></i>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-            <button onClick={handleAddItem} className={styles.addchecklist}>
+            <button
+              type="button"
+              onClick={handleAddItem}
+              className={styles.addchecklist}
+            >
               <span>+</span> Add New
             </button>
             <div className={styles.modal_btns}>
@@ -213,6 +276,7 @@ const token = localStorage.getItem("token")
           </form>
         </div>
       </div>
+      <ToastContainer position="top-right" />
     </>
   );
 };
