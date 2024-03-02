@@ -44,7 +44,7 @@ export const Settings = () => {
     try {
       const token = localStorage.getItem("token")
       const response = await fetch(
-        "https://swarnapprava5426-gmail-com-cuvette-final-ea3b.onrender.com/api/auth/update-password",
+        "http://localhost:5000/api/auth/update-password",
         {
           method: "put",
           headers: {

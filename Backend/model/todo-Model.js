@@ -54,11 +54,11 @@ const todoSchema = new mongoose.Schema({
     type: String,
     default: null, // Set default value to null
   },
-  identifier: {
-    type: mongoose.Schema.Types.ObjectId,
-    default: mongoose.Types.ObjectId,
-    unique: true,
-  },
+  // identifier: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   default: () => new mongoose.Types.ObjectId(),
+  //   unique: true,
+  // },
 
   createdDate: {
     type: Date,
